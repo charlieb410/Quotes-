@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://use.fontawesome.com/f7adcf049e.js"></script>
+  <script src='jquery-3.1.0.min.js'></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <title>Quotes++</title>
+  <style type="text/css">
+  	html, body{
+  width:100%;
+  height:100%;
+}
+
+p{
+  font-size: 1.1em;
+}
+
+h1{
+  font-family: 'Bangers', cursive;
+}
+
+.content-box{
+  width:100%;
+  height:100%;
+  display:table;
+  text-align:center;
+  background-color: #bf9c20;
+}
+.quotes-container{
+  display:table-cell;
+  vertical-align:middle;
+}
+
+.quotes-container h1{
+  padding-bottom:1.5%;
+}
+
+.quotes-container p{
+  padding-bottom:.5%;
+}
+blockquote{
+ /* width:50em;
+  margin: 0 auto;*/
+}
+
+  </style>
+
+</head>
+
+<body>
+
+<div class ="content-box">
+  <div class = "quotes-container">
+    
+    <div class='col-md-8 col-md-offset-2'>
+    <h1>Quotes++</h1>
+    <blockquote><p id = "quoteContainer"></p></blockquote>
+    <button class = "btn btn-danger" id = "getNewQuote"> <i class="fa fa-cogs" aria-hidden="true"></i>Quote</button>
+    <a class="btn btn-danger" id = "tweetButton" href ="https://twitter.com/intent/tweet?text="><i class="fa fa-twitter" aria-hidden="true"></i>Tweet</a>
+    </div>
+    
+  </div>
+</div> 
+
+<script type="text/javascript">
+	$(document).ready(function(){
+  
+   $.getJSON("http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=?", function(json){
+      $("#quoteContainer").html('<p>"'+json.quoteText+'"</p>'  + "<p>-"+json.quoteAuthor+"</p>");
+   });
+ 
+    $("#getNewQuote").click(function(){
+      $.getJSON("http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=?", function(json){
+        $("#quoteContainer").html('<p>"'+json.quoteText+'"</p>'  + "<p>-"+json.quoteAuthor+"</p>");
+      });
+  });
+  
+window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+ 
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+ 
+  return t;
+}(document, "script", "twitter-wjs"));
+  
+      $("#tweetButton").click(function(){
+        var str = $("#quoteContainer").text();
+        str = encodeURI(str);
+        $("#tweetButton").attr("href", "https://twitter.com/intent/tweet?text="+str);
+        console.log(str);
+      });
+       
+  
+  });
+
+</script>
+
+</body>
+
+</html>
